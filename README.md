@@ -94,12 +94,12 @@
 
 ## 저장소 구조
 
-text
+```text
 data-mining/
 ├── 01_data_pipeline.ipynb
 ├── 02_regression.ipynb
 └── README.md
-
+```
 
 ---
 
