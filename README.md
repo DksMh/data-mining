@@ -105,5 +105,13 @@ data-mining/
 
 ## 사용 기술
 
-Python pandas yfinance statsmodels seaborn matplotlib  
-Google Colab Google Drive AWS S3
+Python, pandas, yfinance, statsmodels, seaborn, matplotlib 
+Google Colab, Google Drive, AWS S3
+
+---
+
+## 향후 계획
+
+- Rolling Beta 분석 결과를 정리, Q3 시장 국면별 분할 회귀와 Chow Test를 수행할 예정
+- AWS S3를 활용해 데이터 저장 및 업데이트 자동화 예정
+- 핵심 변수 기반의 Streamlit 대시보드를 구축해 결과를 시각적으로 탐색할 예정
