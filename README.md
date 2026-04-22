@@ -107,7 +107,7 @@ data-mining/
 ## 사용 기술
 
 Python, pandas, yfinance, statsmodels, seaborn, matplotlib 
-Google Colab, Google Drive, AWS S3
+Google Colab, Google Drive
 
 ---
 
