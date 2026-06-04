@@ -7,16 +7,13 @@
 
 ## 프로젝트 개요
 
-본 프로젝트는 원/달러 환율, S&P500, KOSPI, VIX, WTI, Google Trends 기반 AI 관심도 등 6개 변수가 한국·미국 기술주 ETF 수익률에 어떤 영향을 미치는지 분석합니다.  
-주요 방법은 주간 데이터 기반의 OLS 다중회귀이며, 이후 Rolling Beta와 시장 국면별 분석으로 확장할 계획입니다. 
+원/달러 환율, S&P500, KOSPI, VIX, WTI, Google Trends 기반 AI 관심도 등 6개 거시변수가
+한국·미국 기술주 ETF 수익률에 미치는 영향을 비교 분석합니다.
+주간 데이터 기반 OLS 다중회귀를 기반으로, 다변량 Rolling Beta·국면별 Chow Test·
+Bootstrap 강건성 검증까지 확장하였습니다.
 
----
-
-## 연구 질문
-
-- **Q1**: 6개 변수 중 어떤 변수가 한국·미국 기술주 ETF 수익률에 가장 큰 영향을 미치는가?
-- **Q2**: 동일 변수가 한국 ETF와 미국 ETF에 미치는 영향은 어떻게 다른가?
-- **Q3**: 시장 국면에 따라 영향력이 어떻게 변화하는가? *(향후 분석)*
+- **분석 기간**: 2022-01-14 ~ 2026-05-29 (229주, 주간 수익률)
+- **대시보드**: http://43.201.26.86:8501 (AWS EC2 배포)
 
 ---
 
@@ -26,70 +23,43 @@
 |------|------|------|
 | 한국 ETF | KODEX 반도체 | 091160.KS |
 | 한국 ETF | TIGER 200 IT | 157490.KS |
-| 미국 ETF | SOXX | SOXX |
-| 미국 ETF | QQQ | QQQ |
+| 미국 ETF | SOXX (원화환산) | SOXX |
+| 미국 ETF | QQQ (원화환산) | QQQ |
 
-**독립변수**: 원/달러 환율, S&P500, KOSPI, VIX, WTI, Google Trends AI 관심도  
-**분석 기간**: 2022-01-01 ~ 현재 *(주간 데이터, 약 223주 기준)* 
----
-
-## 주요 가설
-
-- **H1-1**: 한국 ETF의 환율 민감도 > 미국 ETF
-- **H1-2**: 한국 ETF의 유가 민감도 > 미국 ETF
-- **H1-3**: 미국 ETF의 시장지수 민감도 > 한국 ETF
-- **H1-4**: 미국 ETF의 IT 관심도 민감도 > 한국 ETF
+**독립변수 6개**: USD/KRW 환율, S&P500, KOSPI, VIX, WTI, AI관심도(Google Trends)
 
 ---
 
-## 분석 파이프라인
+## 시장 국면 구분 (FOMC 기준)
 
-수집 → 전처리 → VIF 진단 → OLS 회귀 → Rolling Beta
-
-| 파일 | 내용 |
-|------|------|
-| 01_data_pipeline.ipynb | 데이터 수집, 전처리, VIF, 상관관계 히트맵 |
-| 02_regression.ipynb | OLS 다중회귀, Rolling Beta |
-
----
-
-## 현재까지 완료된 분석 결과
-
-- VIF 진단 결과, 6개 독립변수 모두 다중공선성 기준상 양호했습니다.
-- 상관관계에서 KODEX 반도체와 환율은 음의 관계, SOXX와 환율은 거의 무관한 관계를 보였습니다. 
-- 전체 기간 OLS 결과에서 미국 ETF는 S&P500과 환율 변수에 강하게 반응했습니다. 
-- 한국 ETF에서는 KOSPI 변수의 설명력이 상대적으로 두드러졌습니다. 
-- AI 관심도는 4개 ETF 모두에서 통계적으로 유의하지 않았습니다. 
-- Rolling Beta (26주 이동창, 환율 기준)
-  
----
-  
-## 진행 중인 작업
-
-- Q3 시장 국면별 분석
-- Streamlit 대시보드 구현
-
----
-
-## 시장 국면 구분
-
-시장 국면은 FOMC 금리 결정 시점을 기준으로 구분했습니다. 이 구분은 향후 국면별 분석(Q3)에 활용할 예정입니다. 
-
-| 구간 | 기간 |
+| 국면 | 기간 |
 |------|------|
 | 긴축기 | 2022-03-17 ~ 2023-07-26 |
-| AI 랠리기 | 2023-07-27 ~ 2024-09-17 |
+| AI랠리기 | 2023-07-27 ~ 2024-09-17 |
 | 불확실성기 | 2024-09-18 ~ 2025-12-31 |
 | 현재 | 2026-01-01 ~ |
 
 ---
 
-## 실행 방법
+## 주요 가설 및 최종 결과
 
-1. Google Colab에서 노트북을 엽니다.
-2. Google Drive를 마운트합니다.
-3. google_trends_AI_weekly_final.csv 파일을 Drive에 업로드합니다.
-4. 셀 순서대로 실행합니다. 
+| 가설 | 내용 | 판정 |
+|------|------|------|
+| H1-1 | 한국 ETF 환율 민감도 > 미국 ETF | ❌ 기각 |
+| H1-2 | 유가가 ETF 수익에 영향 | ⚠️ 부분 지지 (KODEX만) |
+| H1-3 | 각국 시장지수가 지배적 | ✅ 지지 |
+| H1-4 | AI관심도가 직접 영향 | ❌ 기각 |
+
+---
+
+## 기말 심층 분석 (교수님 Q1~Q4 대응)
+
+| Q | 내용 | 핵심 결과 |
+|---|------|----------|
+| Q1 | 다변량 Rolling Beta | 6변수 통제 후에도 KODEX 현재 국면 β 음수 유지 |
+| Q2 | SOXX β 원화/달러 분리 | β_원화=1.044, β_달러=0.031, 차이≈1 → 회계효과 |
+| Q3 | AI관심도 Mediator 탐색 | 직접효과 없음, 간접경로 가능성 시사 |
+| Q4 | Bootstrap CI + Chow Test | LOO 전구간 음수, Chow p=0.003 구조변화 확인 |
 
 ---
 
@@ -97,22 +67,65 @@
 
 ```text
 data-mining/
-├── 01_data_pipeline.ipynb
-├── 02_regression.ipynb
-└── README.md
+├── 01_data_pipeline.ipynb       # 데이터 수집·전처리·VIF·상관관계
+├── 02_regression.ipynb          # OLS·Rolling Beta·Bootstrap·Chow Test
+├── 데이터마이닝_안명현_발표자료.pdf  # 기말 발표 슬라이드
+├── README.md                # 데이터 설명
+├── data/│   
+│   ├── analysis_ready.csv       # 최종 분석 데이터 (229주)
+│   └── google_trends_AI_weekly_final.csv  # Google Trends 원본
+└── dashboard/
+    ├── streamlit_app.py         # Streamlit 대시보드 소스코드
+    ├── analysis_ready.csv       # 대시보드용 데이터
+    └── requirements.txt         # 라이브러리 목록
+```
+
+---
+
+## 분석 파이프라인
+
+```
+데이터 수집(yfinance·Google Trends)
+→ 전처리·원화환산·국면라벨링
+→ VIF 진단·상관관계 히트맵
+→ OLS 다중회귀 (전체기간)
+→ 잔차진단 (Durbin-Watson·Breusch-Pagan)
+→ 다변량 Rolling Beta (26주창)
+→ SOXX β 원화/달러 분리
+→ AI관심도 Mediator 탐색
+→ Bootstrap CI + LOO
+→ 국면별 OLS + Chow Test
+```
+
+---
+
+## 실행 방법
+
+1. Google Colab에서 노트북을 엽니다.
+2. Google Drive를 마운트합니다.
+3. `data/` 폴더의 CSV 파일을 Drive에 업로드합니다.
+4. `01_data_pipeline.ipynb` → `02_regression.ipynb` 순서로 실행합니다.
+
+**대시보드 로컬 실행:**
+```bash
+pip install -r dashboard/requirements.txt
+streamlit run dashboard/streamlit_app.py
 ```
 
 ---
 
 ## 사용 기술
 
-Python, pandas, yfinance, statsmodels, seaborn, matplotlib 
-Google Colab, Google Drive
+Python, pandas, numpy, yfinance, statsmodels, scipy, plotly, streamlit  
+Google Colab, Google Drive, AWS EC2, GitHub
 
 ---
 
-## 향후 계획
+## 한계 및 향후 과제
 
-- Rolling Beta 분석 결과를 정리, Q3 시장 국면별 분할 회귀와 Chow Test를 수행할 예정
-- AWS S3를 활용해 데이터 저장 및 업데이트 자동화 예정
-- 핵심 변수 기반의 Streamlit 대시보드를 구축해 결과를 시각적으로 탐색할 예정
+- 현재 국면 표본 소규모 (n=22주) → 향후 표본 확대
+- KODEX 이분산성 미보정 → Newey-West 강건 표준오차 적용 필요
+- AI관심도 정식 매개효과 검정 미수행 → Baron-Kenny·Sobel Test 적용 필요
+- 인과관계 단정 불가 → 향후 인과 검정 권장
+
+
