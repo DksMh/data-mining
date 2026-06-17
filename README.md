@@ -112,6 +112,9 @@ pip install -r dashboard/requirements.txt
 streamlit run dashboard/streamlit_app.py
 ```
 
+### 또는 아래주소로 확인 가능
+- http://13.124.53.41:8501/
+
 ---
 
 ## 사용 기술
