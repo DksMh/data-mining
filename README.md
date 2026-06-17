@@ -31,6 +31,7 @@ Bootstrap 강건성 검증까지 확장하였습니다.
 | 미국 ETF | QQQ (원화환산) | QQQ |
 
 **독립변수 6개**: USD/KRW 환율, S&P500, KOSPI, VIX, WTI, AI관심도(Google Trends)
+**원화 환산 공식**: `r_KRW = (1 + r_USD) × (1 + r_FX) − 1`
 
 ---
 
@@ -65,6 +66,8 @@ Bootstrap 강건성 검증까지 확장하였습니다.
 | Q3 | AI관심도 Mediator 탐색 | 직접효과 없음, 간접경로 가능성 시사 |
 | Q4 | Bootstrap CI + Chow Test | LOO 전구간 음수, Chow p=0.003 구조변화 확인 |
 
+> 모든 결과는 잔차진단(Durbin-Watson·Breusch-Pagan)을 거쳤으며, KODEX 모형은 이분산성 가능성(BP p=0.026)이 있어 보수적으로 해석하였습니다.
+
 ---
 
 ## 저장소 구조
@@ -76,13 +79,14 @@ data-mining/
 ├── 데이터마이닝_안명현_기말발표자료.pdf  # 기말 발표 슬라이드
 ├── README.md                # 데이터 설명
 ├── data/   
-│   ├── analysis_ready.csv       # 최종 분석 데이터 (229주)
+│   ├── analysis_ready.csv       # 최종 분석 데이터 (계속 업데이트)
 │   └── google_trends_AI_weekly_final.csv  # Google Trends 원본
 └── dashboard/
     ├── streamlit_app.py         # Streamlit 대시보드 소스코드
-    ├── analysis_ready.csv       # 대시보드용 데이터
+    ├── analysis_ready.csv       # 대시보드용 데이터 (주 단위 갱신)
     └── requirements.txt         # 라이브러리 목록
 ```
+> ⚠️ `data/analysis_ready.csv`(보고서 고정본)와 `dashboard/analysis_ready.csv`(실시간 갱신본)는 서로 다른 시점의 데이터입니다. 보고서 수치를 재현하려면 `data/` 폴더의 파일을 사용하세요.
 
 ---
 
@@ -96,7 +100,7 @@ data-mining/
 → 잔차진단 (Durbin-Watson·Breusch-Pagan)
 → 다변량 Rolling Beta (26주창)
 → SOXX β 원화/달러 분리
-→ AI관심도 Mediator 탐색
+→ AI관심도 Mediator 탐색 (+ Lag 1~2주 보조 분석)
 → Bootstrap CI + LOO
 → 국면별 OLS + Chow Test
 ```
@@ -105,6 +109,7 @@ data-mining/
 
 ## 실행 방법
 
+### 노트북 재현 (보고서 기준 결과)
 1. Google Colab에서 노트북을 엽니다.
 2. Google Drive를 마운트합니다.
 3. `data/` 폴더의 CSV 파일을 Drive에 업로드합니다.
@@ -116,20 +121,21 @@ pip install -r dashboard/requirements.txt
 streamlit run dashboard/streamlit_app.py
 ```
 
-### 또는 아래주소로 확인 가능
-- http://13.124.53.41:8501/
+### 대시보드 바로 확인 (갱신본)
+👉 http://13.124.53.41:8501
 
 ---
 
 ## 사용 기술
 
-Python, pandas, numpy, yfinance, statsmodels, scipy, plotly, streamlit  
+Python (pandas, numpy, yfinance, statsmodels, scipy, plotly, streamlit)
 Google Colab, Google Drive, AWS EC2, GitHub
 
 ---
 
 ## 한계 및 향후 과제
 
-- 현재 국면 표본 소규모 (n=22주) → 향후 표본 확대
+- 현재 국면 표본 소규모 (보고서 기준 n=22주, 대시보드에서는 매주 증가) → 향후 표본 확대
+- 본 연구는 설명 모형에 초점 → out-of-sample 예측, 포트폴리오 백테스트 등 향후 검증 필요
 
 
