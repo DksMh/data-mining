@@ -688,17 +688,27 @@ def tab_bootstrap_chow(df):
                 row[phase] = f"{b:.2f}{star} (n={n})"
         table_rows.append(row)
     st.dataframe(pd.DataFrame(table_rows).set_index("ETF"), use_container_width=True)
-    st.caption("★ = p < 0.05. 현재 국면 n=22로 소표본 — F값 분산 클 수 있음.")
+    st.caption(f"★ = p < 0.05. 현재 국면 n={n_now}로 소표본 — F값 분산 클 수 있음.")
 
     # Chow Test
     st.markdown("**Chow Test — 인접 국면 간 구조변화 검정**")
     with st.spinner("Chow Test 계산 중..."):
         chow_df = run_chow_all(df)
     st.dataframe(chow_df.set_index("ETF"), use_container_width=True)
+    bf_pass = [
+        f"{r['ETF']} {r['국면 쌍']}"
+        for _, r in chow_df.iterrows()
+        if r["p값"] != "—" and float(r["p값"]) < 0.004
+    ]
     st.caption(
         "⚠️ 탐색적 증거 수준 — 4 ETF × 3 국면쌍 = 12개 동시 검정, 다중비교 보정 미적용.\n"
-        "Bonferroni 기준 p < 0.004 적용 시: KODEX 긴축기→AI랠리기 통과."
+        f"Bonferroni 기준 p < 0.004 적용 시 통과: {', '.join(bf_pass)}."
     )
+
+    # Chow Test 캡션 아래, 구조변화 해석 위에 추가
+    chow_p_kodex = chow_df[
+        (chow_df["ETF"] == "KODEX 반도체") & (chow_df["국면 쌍"] == "긴축기 → AI랠리기")
+    ]["p값"].iloc[0]
 
     # 구조변화 해석 — 실시간 β값 사용
     b_긴축 = kodex_data["긴축기"]["beta"]
@@ -707,7 +717,7 @@ def tab_bootstrap_chow(df):
     p_현재 = kodex_data["현재"]["pval"]
     st.markdown(
         f"**구조변화 해석:** 긴축기(β={b_긴축:.2f})에서 AI랠리기(β={b_ai:.2f})로 부호까지 전환되며 "
-        f"계수가 구조적으로 달라짐 (Chow p=0.003). "
+        f"계수가 구조적으로 달라짐 (Chow p={chow_p_kodex}). "
         f"현재 국면에서는 β={b_현재:.2f}(p={p_현재:.3f})로 재차 음전환 — "
         "단순 전체 기간 평균 β로는 포착 불가능한 국면별 이질성 확인."
     )
