@@ -30,8 +30,8 @@ Bootstrap 강건성 검증까지 확장하였습니다.
 | 미국 ETF | SOXX (원화환산) | SOXX |
 | 미국 ETF | QQQ (원화환산) | QQQ |
 
-**독립변수 6개**: USD/KRW 환율, S&P500, KOSPI, VIX, WTI, AI관심도(Google Trends)
-**원화 환산 공식**: `r_KRW = (1 + r_USD) × (1 + r_FX) − 1`
+- **독립변수 6개**: USD/KRW 환율, S&P500, KOSPI, VIX, WTI, AI관심도(Google Trends)
+- **원화 환산 공식**: `r_KRW = (1 + r_USD) × (1 + r_FX) − 1`
 
 ---
 
