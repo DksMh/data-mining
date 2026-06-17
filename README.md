@@ -124,8 +124,5 @@ Google Colab, Google Drive, AWS EC2, GitHub
 ## 한계 및 향후 과제
 
 - 현재 국면 표본 소규모 (n=22주) → 향후 표본 확대
-- KODEX 이분산성 미보정 → Newey-West 강건 표준오차 적용 필요
-- AI관심도 정식 매개효과 검정 미수행 → Baron-Kenny·Sobel Test 적용 필요
-- 인과관계 단정 불가 → 향후 인과 검정 권장
 
 
