@@ -86,7 +86,7 @@ data-mining/
     ├── analysis_ready.csv       # 대시보드용 데이터 (주 단위 갱신)
     └── requirements.txt         # 라이브러리 목록
 ```
-> ⚠️ `data/analysis_ready.csv`(보고서 고정본)와 `dashboard/analysis_ready.csv`(실시간 갱신본)는 서로 다른 시점의 데이터입니다. 보고서 수치를 재현하려면 `data/` 폴더의 파일을 사용하세요.
+> ⚠️ `data/analysis_ready.csv`(보고서 고정본)와 `dashboard/analysis_ready.csv`(주단위 갱신본)는 서로 다른 시점의 데이터입니다. 보고서 수치를 재현하려면 `data/` 폴더의 파일을 사용하세요.
 
 ---
 
