@@ -79,7 +79,7 @@ data-mining/
 ├── 데이터마이닝_안명현_기말발표자료.pdf  # 기말 발표 슬라이드
 ├── README.md                # 데이터 설명
 ├── data/   
-│   ├── analysis_ready.csv       # 최종 분석 데이터 (계속 업데이트)
+│   ├── analysis_ready.csv       # 보고서 기준 분석 데이터 (229주)
 │   └── google_trends_AI_weekly_final.csv  # Google Trends 원본
 └── dashboard/
     ├── streamlit_app.py         # Streamlit 대시보드 소스코드
